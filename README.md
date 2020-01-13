@@ -10,10 +10,12 @@ or
 http://localhost:8080/validate?barcode={barcode}
 
 #API-Docs
+
 Swagger is configured to create the API documentation for this project.
 "barcodevalidator_api-docs.json" is the api-doc file that is available inside the api-docs directory.
 API docs can also be accessed within the app as below.
 http://localhost:8080/v2/api-docs
+
 http://localhost:8080/swagger-ui.html
 
 
