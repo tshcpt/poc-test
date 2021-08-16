@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: poc-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: poc
+  template:
+    metadata:
+      labels:
+        app: poc
+    spec:
+      containers:
+        - name: poc
+          image: poc-repo/latest
+          ports:
+            - containerPort: 5000
