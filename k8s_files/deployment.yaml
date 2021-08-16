@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: poc
-          image: poc-repo/latest
+          image: 020436079950.dkr.ecr.us-east-1.amazonaws.com/poc-repo
           ports:
             - containerPort: 5000
