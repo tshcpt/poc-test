@@ -1,11 +1,11 @@
-CREATE TABLE poc.message_details (
+CREATE TABLE pocdb.message_details (
                        id bigint NOT NULL AUTO_INCREMENT,
                        channel_name varchar(100) NOT NULL,
                        sent_date_time TIMESTAMP NOT NULL,
                        PRIMARY KEY (id)
 )DEFAULT CHARSET=UTF8MB4;
 
-CREATE TABLE poc.transaction_details (
+CREATE TABLE pocdb.transaction_details (
                         id bigint NOT NULL AUTO_INCREMENT,
                         rx_ac_id varchar(50) NOT NULL,
                         sender_ac_id varchar(50) NOT NULL,
