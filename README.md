@@ -18,4 +18,67 @@ http://localhost:8080/v2/api-docs
 
 http://localhost:8080/swagger-ui.html
 
+Sample Request - Json ->
+`{
+	"messageHeader":{
+       "id": "123",
+       "sentDateTime": "2021-11-17T04:52:35.694Z",
+       "channelName": "API_GATEWAY"
+	},
+"messageBody":{
+ "payId":"123",
+ "methodOfPay":"BOOK",
+ "transferType":"CREDIT",
+ "transactionType":"V2V",
+ "transactionDetail": [
+    {
+	 "rxAcId":"TSIP",
+	 "senderAcId": "TVAT",
+	 "amount":1.8,
+     "serviceCode": "IN1001",
+	 "peCode": "10004",
+	 "txId": "abc",
+	 "mopId": "MC",
+	 "eodId": "EURO2020278",
+	 "poId":"abc"
+	},
+	{
+	"rxAcId":"TDMNET",
+	 "senderAcId": "TREVIN",
+	 "amount":1.8,
+	 "serviceCode": "BK10",
+	 "peCode": "10004",
+	 "txId": "abc",
+	 "mopId": "MC",
+	 "eodId": "EURO2020278",
+	 "poId":"abc"
+	},
+	{
+	  "rxAcId":"TREVIN",
+	 "senderAcId": "TSIP",
+	 "amount":1.8,
+	  "serviceCode": "BK10",
+	 "peCode": "10004",
+	 "txId": "abc",
+	 "mopId": "MC",
+	 "eodId": "EURO2020278",
+	 "poId":"abc"
+	},
+	{
+	  "rxAcId":"TSIP",
+	 "senderAcId": "TDMNET",
+	 "amount":1.8,
+	  "serviceCode": "LC13",
+	 "peCode": "10004",
+	 "txId": "abc",
+	 "mopId": "MC",
+	 "eodId": "EURO2020278",
+	 "poId":"abc"
+	}
+	]
+ }
+}
+	 
+ 
 
+`
