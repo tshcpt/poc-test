@@ -12,4 +12,4 @@ spring:
     locations: classpath:db/migration
     baseline-on-migrate: true
   profiles:
-    active: local
+    active: dev
