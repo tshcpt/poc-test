@@ -1,8 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: poc-deployment
-  namespace: default
+  name: poc
 spec:
   replicas: 1
   selector:
@@ -15,6 +14,6 @@ spec:
     spec:
       containers:
         - name: poc
-          image: 020436079950.dkr.ecr.us-east-1.amazonaws.com/poc-repo
+          image: 020436079950.dkr.ecr.us-east-1.amazonaws.com/poc-repo:latest
           ports:
             - containerPort: 8080
