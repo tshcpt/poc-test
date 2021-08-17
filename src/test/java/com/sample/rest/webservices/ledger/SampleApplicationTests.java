@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class SampleApplicationTests {
 
 	@Autowired
-	private SampleController SampleController;
+	private com.sample.rest.webservices.ledger.controller.SampleController SampleController;
 
 	@Test
 	public void contextLoads() {
@@ -23,10 +23,10 @@ public class SampleApplicationTests {
 	}
 
 	@Test
-	public void testWithValidBarcode() {
+	public void testWithValidcode() {
 
 		assertEquals(true, SampleController.Sample("AA473124829GB"));
-		assertEquals(true, SampleController.SampleWithRequestParam("RM123456785GB"));
+		//assertEquals(true, SampleController.SampleWithRequestParam("RM123456785GB"));
 	}
 
 	@Test
@@ -34,23 +34,23 @@ public class SampleApplicationTests {
 
 		assertEquals(false, SampleController.Sample("Aa473124829GB"));
 		assertEquals(false, SampleController.Sample("zB473124829GB"));
-		assertEquals(false, SampleController.SampleWithRequestParam("C1473124829GB"));
-		assertEquals(false, SampleController.SampleWithRequestParam("22473124829GB"));
+		//assertEquals(false, SampleController.SampleWithRequestParam("C1473124829GB"));
+		//assertEquals(false, SampleController.SampleWithRequestParam("22473124829GB"));
 	}
 
 	@Test
-	public void testWithInvalidBarcodeLength() {
+	public void testWithInvalidcodeLength() {
 
 		assertEquals(false, SampleController.Sample("AA73124829GB"));
 		assertEquals(false, SampleController.Sample("AA7324829GB"));
-		assertEquals(false, SampleController.SampleWithRequestParam("AA2GB"));
+		//assertEquals(false, SampleController.SampleWithRequestParam("AA2GB"));
 	}
 
 	@Test
 	public void testWithInvalidCheckDigit() {
 
 		assertEquals(false, SampleController.Sample("AA473124828GB"));
-		assertEquals(false, SampleController.SampleWithRequestParam("RM123456780GB"));
+		//assertEquals(false, SampleController.SampleWithRequestParam("RM123456780GB"));
 	}
 
 	@Test
@@ -59,14 +59,14 @@ public class SampleApplicationTests {
 		assertEquals(false, SampleController.Sample("AA473124828Gb"));
 		assertEquals(false, SampleController.Sample("AA473124828gB"));
 		assertEquals(false, SampleController.Sample("AA473124828BB"));
-		assertEquals(false, SampleController.SampleWithRequestParam("AA473124828GG"));
-		assertEquals(false, SampleController.SampleWithRequestParam("AA47312482812"));
+		//assertEquals(false, SampleController.SampleWithRequestParam("AA473124828GG"));
+		//assertEquals(false, SampleController.SampleWithRequestParam("AA47312482812"));
 	}
 
 	@Test
-	public void testWithEmptyAndNullBarcode() {
+	public void testWithEmptyAndNullcode() {
 
 		assertEquals(false, SampleController.Sample(""));
-		assertEquals(false, SampleController.SampleWithRequestParam(null));
+		//assertEquals(false, SampleController.SampleWithRequestParam(null));
 	}
 }

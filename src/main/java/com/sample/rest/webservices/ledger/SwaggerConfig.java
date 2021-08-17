@@ -13,7 +13,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig {
 
-	public static final Contact CONTACT_INFO = new Contact("Vinoth Senthamaraikannan", "", "vinoth54@gmail.com");
+	public static final Contact CONTACT_INFO = new Contact("Vanitha Subbiah", "", "vanithas54@gmail.com");
 	public static final ApiInfo UPDATED_API_INFO = new ApiInfo("Sample RESTAPI", "Sample REST API",
 			"1.0", "urn:tos", CONTACT_INFO, "Apache 2.0", "http://www.apache.org/licenses/LICENSE-2.0");
 
