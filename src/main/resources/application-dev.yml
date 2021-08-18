@@ -1,7 +1,7 @@
 spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://pocdb-instance-1.cipwprgh221p.us-east-1.rds.amazonaws.com:3306/pocdb?serverTimezone=EDT
+    url: jdbc:mysql://database-1-instance-1.cipwprgh221p.us-east-1.rds.amazonaws.com:3306/pocdb?serverTimezone=EDT
     username: admin
     password: Feud640yarn413
   jpa:
