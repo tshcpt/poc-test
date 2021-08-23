@@ -1,7 +1,9 @@
 package com.sample.rest.webservices.ledger.service;
 
+import com.sample.rest.webservices.ledger.consumer.LedgerConsumer;
 import com.sample.rest.webservices.ledger.entity.MessageDetails;
 import com.sample.rest.webservices.ledger.entity.QueryResult;
+import com.sample.rest.webservices.ledger.producer.ResultProducer;
 import com.sample.rest.webservices.ledger.repository.MessageRepository;
 import com.sample.rest.webservices.ledger.repository.TransactionRepository;
 import com.sample.rest.webservices.ledger.request.AggregateRequest;
@@ -14,12 +16,15 @@ import org.apache.kafka.clients.producer.RecordMetadata;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Logger;
 
 /**
  * This Service class
@@ -27,9 +32,10 @@ import java.util.concurrent.CompletableFuture;
  */
 @Component
 public class SampleServiceImpl implements SampleService {
+	final static Logger log = Logger.getLogger(SampleServiceImpl.class.getName());
 
-	//@Autowired
-	//private ResultProducer resultProducer;
+	@Autowired
+	private ResultProducer resultProducer;
 
 	@Autowired
 	private MessageRepository  messageRepository;
@@ -68,10 +74,12 @@ public class SampleServiceImpl implements SampleService {
 		return constructAggregateResponse(resultData, request.getCreiteria().ledgerId);
 	}
 
-	public void persistMessage(MessageDetails message){
+	public Mono<Void> persistMessage(MessageDetails message){
 
 		messageRepository.save(message);
-		//return resultProducer.publish(prepareResponse(message));
+		return resultProducer.publish(prepareResponse(message)).retryWhen(Retry.backoff(3, Duration.ofSeconds(2))
+		.doBeforeRetry(retrySignal ->log.warning("Retry publish ..."+retrySignal)))
+				.then();
 	}
 
 	private ClientNotification prepareResponse(MessageDetails message) {

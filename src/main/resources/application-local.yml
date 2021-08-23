@@ -18,30 +18,41 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
   cloud:
+    function:
+      definition: ledgerConsumer;resultProducer;resultConsumer;
     stream:
-      function:
-        definition: ledgerConsumer; resultProducer;
+      default-binder: poc-cluster-binder
+      default:
+        producer:
+          errorChannelEnabled: true
       kafka:
-        binder:
-          brokers: localhost:9092
-          configuration:
-            key:
-              deserializer: org.apache.kafka.common.serialization.StringDeserializer
-              serializer: org.apache.kafka.common.serialization.StringDeserializer
-            value:
-              deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
-              serializer: org.apache.kafka.common.serialization.ByteArraySerializer
+        default:
+          producer:
+            configuration:
+              linger.ms: 100
+      binders:
+        poc-cluster-binder:
+          type: kafka
+          environment:
+            spring:
+              cloud:
+                stream:
+                  kafka:
+                    binder:
+                      autoCreateTopics: false
+                      brokers: localhost:9092
+      function:
         bindings:
-          ledgerConsumer-in-0:
-            consumer:
-              enableDlq: false
-              #dlqName: poc-inqueue-dlq-v1
-              ack-mode: BATCH
-
+          ledgerConsumer-in-0: poc-con-in
+          resultProducer-out-0: poc-res-out
+          resultConsumer-in-0: poc-res-in
       bindings:
-        ledgerConsumer-in-0:
-          destination: poc-inbound
-          group: inbound
-        resultProducer-out-0:
-          consumer:
-            destination: poc-outbound
+        poc-con-in:
+          destination: poc-inbound1
+          group: inbound1
+        poc-res-out:
+          content-type: application/json
+          destination: poc-outbound1
+        poc-res-in:
+          destination: poc-outbound1
+          group: outbound1

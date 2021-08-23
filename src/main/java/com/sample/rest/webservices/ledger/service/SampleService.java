@@ -26,6 +26,6 @@ public interface SampleService {
 
 	AggregateResponse getAggregateBalance(AggregateRequest aggregateRequest);
 
-	void persistMessage(MessageDetails messageDetails);
+	Mono<Void> persistMessage(MessageDetails messageDetails);
 
 }
