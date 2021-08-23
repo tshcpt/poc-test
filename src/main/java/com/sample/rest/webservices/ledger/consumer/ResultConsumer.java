@@ -36,14 +36,34 @@ public class ResultConsumer<T> implements Function<Flux<Message<byte[]>>, Mono<V
 
     @Override
     public Mono<Void> apply(Flux<Message<byte[]>> messageFlux) {
-        log.info("Inside consumer - "+messageFlux);
+        log.info("Inside Result consumer - "+messageFlux);
 
-        return messageFlux.doOnEach(data -> log.info("Message Received ->  "+data+ " time: "+new Date()))
-                .onErrorContinue(InvalidDataConsumerException.class, (throwable, o) -> log.info("Exception while consuming result message"))
-                        .then()
+        return messageFlux.doOnEach(this::acknowledge)
+                .map(msg -> new String(msg.getPayload()))
+                .doOnNext(jsonString -> log.info("Transaction request received:\n"+jsonString))
+                //.map(json -> SerializationUtils.deserialize(json.toString(), Root.class ))
+                //.map(request -> processEvent(request))
+                //.doOnNext(payload -> sampleService.persistMessage(payload))
+                .doOnError(error -> log.info(" Error occurred while persisting request"+ error))
+                .onErrorContinue(InvalidDataConsumerException.class, (throwable, o) -> log.info("Exception while consuming message"))
+                .then()
                 .retry();
 
+
+        /*return messageFlux.doOnEach(data -> log.info("Message Received ->  "+data+ " time: "+new Date()))
+                .onErrorContinue(InvalidDataConsumerException.class, (throwable, o) -> log.info("Exception while consuming result message"))
+                        .then()
+                .retry();*/
+
     }
+
+    private void acknowledge(final Signal<Message<byte[]>> signal){
+        if(signal.getType() == SignalType.ON_NEXT){
+            Message<byte[]> message = signal.get();
+            Acknowledgment ack = message.getHeaders().get(KafkaHeaders.ACKNOWLEDGMENT, Acknowledgment.class);
+        }
+    }
+
 
     @Override
     public <V> Function<V, Mono<Void>> compose(Function<? super V, ? extends Flux<Message<byte[]>>> before) {

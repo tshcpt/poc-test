@@ -6,12 +6,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown= true)
 public class Event{
+    public Instant origMsgTime;
+    public Instant notifTime;
     public String id;
     public long creationDateTime;
     public long occurrenceDateTime;

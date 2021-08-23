@@ -3,7 +3,7 @@ package com.sample.rest.webservices.ledger.entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.List;
 
 @Data
@@ -17,7 +17,7 @@ public class MessageDetails {
 
     private String channelName;
 
-    private ZonedDateTime sentDateTime;
+    private Instant sentDateTime;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "message_detail_id")
