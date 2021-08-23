@@ -60,7 +60,7 @@ public class LedgerConsumer<T> implements Function<Flux<Message<byte[]>>, Mono<V
         MessageHeader header = root.getMessageHeader();
         MessageDetails msgEntity = new MessageDetails();
         msgEntity.setChannelName(header.getChannelName());
-        msgEntity.setSentDateTime(convertToTimeZone(header.getSentDateTime().toString()));
+        msgEntity.setSentDateTime(header.getSentDateTime());
 
         MessageBody messageBody = root.getMessageBody();
         List<TransactionDetails> txEntity = new ArrayList<TransactionDetails>();

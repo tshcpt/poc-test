@@ -20,6 +20,7 @@ import reactor.util.retry.Retry;
 
 import java.math.BigDecimal;
 import java.time.Duration;
+import java.time.Instant;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Optional;
@@ -84,14 +85,18 @@ public class SampleServiceImpl implements SampleService {
 
 	private ClientNotification prepareResponse(MessageDetails message) {
 
+		ClientNotification clientNotification = null;
+
 		if(message.getTransactionDetails() != null){
 			Event event = Event.builder().eventType("BATCH").batchIntegrity(true).eventState("COMPLETED").txType("V2V").finalState(true)
 					.creationDateTime(System.currentTimeMillis())
+					.origMsgTime(message.getSentDateTime())
+					.notifTime(Instant.now())
 					.programId("1002251").occurrenceDateTime(System.currentTimeMillis())
 					.id(message.getTransactionDetails().get(0).getTxId()).build();
-			ClientNotification.builder().event(event);
+			clientNotification = ClientNotification.builder().event(event).build();
 		}
-		return null;
+		return clientNotification;
 	}
 
 	private AggregateResponse constructAggregateResponse(QueryResult result, String ledgerAcId ){

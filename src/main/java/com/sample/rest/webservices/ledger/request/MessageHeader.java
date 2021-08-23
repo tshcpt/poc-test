@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.Instant;
 
 @Data
 @Builder
@@ -15,6 +15,6 @@ import java.util.Date;
 @JsonIgnoreProperties(ignoreUnknown= true)
 public class MessageHeader{
     public String id;
-    public Date sentDateTime;
+    public Instant sentDateTime;
     public String channelName;
 }
