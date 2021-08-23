@@ -41,19 +41,10 @@ public class ResultConsumer<T> implements Function<Flux<Message<byte[]>>, Mono<V
         return messageFlux.doOnEach(this::acknowledge)
                 .map(msg -> new String(msg.getPayload()))
                 .doOnNext(jsonString -> log.info("Transaction request received:\n"+jsonString))
-                //.map(json -> SerializationUtils.deserialize(json.toString(), Root.class ))
-                //.map(request -> processEvent(request))
-                //.doOnNext(payload -> sampleService.persistMessage(payload))
                 .doOnError(error -> log.info(" Error occurred while persisting request"+ error))
                 .onErrorContinue(InvalidDataConsumerException.class, (throwable, o) -> log.info("Exception while consuming message"))
                 .then()
                 .retry();
-
-
-        /*return messageFlux.doOnEach(data -> log.info("Message Received ->  "+data+ " time: "+new Date()))
-                .onErrorContinue(InvalidDataConsumerException.class, (throwable, o) -> log.info("Exception while consuming result message"))
-                        .then()
-                .retry();*/
 
     }
 
