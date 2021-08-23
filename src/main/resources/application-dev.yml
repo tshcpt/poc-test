@@ -1,0 +1,53 @@
+spring:
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://database-1-instance-1.cipwprgh221p.us-east-1.rds.amazonaws.com:3306/pocdb?useSSL=false&serverTimezone=UTC
+    username: admin
+    password: Feud640yarn413
+  jpa:
+    hibernate.ddl-auto: update
+    generate-ddl: true
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+
+  cloud:
+    function:
+      definition: ledgerConsumer;resultProducer;resultConsumer;
+    stream:
+      default-binder: poc-cluster-binder
+      default:
+        producer:
+          errorChannelEnabled: true
+      kafka:
+        default:
+          producer:
+            configuration:
+              linger.ms: 100
+      binders:
+        poc-cluster-binder:
+          type: kafka
+          environment:
+            spring:
+              cloud:
+                stream:
+                  kafka:
+                    binder:
+                      autoCreateTopics: false
+                      brokers: b-1.poc-msk-cluster1.9alykk.c16.kafka.us-east-b-2.poc-msk-cluster1.9alykk.c16.kafka.us-east-1.amazonaws.com:9092,b-1.poc-msk-cluster1.9alykk.c16.kafka.us-east-1.amazonaws.com:9092
+      function:
+        bindings:
+          ledgerConsumer-in-0: poc-con-in
+          resultProducer-out-0: poc-res-out
+          resultConsumer-in-0: poc-res-in
+      bindings:
+        poc-con-in:
+          destination: poc-inbound
+          group: inbound
+        poc-res-out:
+          destination: poc-outbound
+          content-type: application/json
+        poc-res-in:
+          destination: poc-outbound
+          group: outbound
