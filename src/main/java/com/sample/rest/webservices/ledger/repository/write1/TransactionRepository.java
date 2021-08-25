@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import javax.transaction.Transactional;
 
-@Transactional
+
 public interface TransactionRepository extends JpaRepository<TransactionDetails, Long> {
     @Query("select NEW com.sample.rest.webservices.ledger.entity.write1.QueryResult(" +
             "sum(p.amount), " +

@@ -9,9 +9,7 @@ import java.math.BigDecimal;
 @Data
 @Entity
 @Table(name = "transaction_details")
-public class TransactionDetails implements Serializable {
-
-    private static final long serialVersionUID = 123467322579L;
+public class TransactionDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

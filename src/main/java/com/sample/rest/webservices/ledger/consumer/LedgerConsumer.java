@@ -38,7 +38,7 @@ public class LedgerConsumer<T> implements Function<Flux<Message<byte[]>>, Mono<V
     private final SampleService sampleService;
 
     @Override
-    @Transactional
+    
     public Mono<Void> apply(Flux<Message<byte[]>> messageFlux) {
         //log.info("Inside consumer - "+messageFlux.toString());
 
@@ -72,11 +72,11 @@ public class LedgerConsumer<T> implements Function<Flux<Message<byte[]>>, Mono<V
         if(header.getPartitionKeyId() != null){
             key = header.getPartitionKeyId() % 2;
         }
-        log.info("Key =>>>>> "+key);
+        //log.info("Key =>>>>> "+key);
         if(key == 1) {
             MessageDetails msgEntity = new MessageDetails();
             msgEntity.setChannelName(header.getChannelName());
-            //msgEntity.setSentDateTime(header.getSentDateTime());
+            msgEntity.setSentDateTime(header.getSentDateTime());
 
 
             List<TransactionDetails> txEntity = new ArrayList<TransactionDetails>();
@@ -101,7 +101,7 @@ public class LedgerConsumer<T> implements Function<Flux<Message<byte[]>>, Mono<V
         } else {
             Write2MessageDetails msg2Entity = new Write2MessageDetails();
             msg2Entity.setChannelName(header.getChannelName());
-            //msg2Entity.setSentDateTime(header.getSentDateTime());
+            msg2Entity.setSentDateTime(header.getSentDateTime());
             List<Write2TransactionDetails> tx2Entity = new ArrayList<Write2TransactionDetails>();
 
             requestTransactions.stream().forEach(o -> {

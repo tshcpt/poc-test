@@ -79,7 +79,7 @@ public class SampleServiceImpl implements SampleService {
 		return constructAggregateResponse(resultData, request.getCreiteria().ledgerId);
 	}
 
-	@Transactional
+	
 	public Mono<Void> persistMessage(MessageDetails message){
 
 		messageRepository.save(message);
@@ -89,7 +89,7 @@ public class SampleServiceImpl implements SampleService {
 				.then();
 	}
 
-	@Transactional
+	
 	public Mono<Void> persistWrite2Message(Write2MessageDetails message){
 
 		write2MessageRepository.save(message);
@@ -108,7 +108,7 @@ public class SampleServiceImpl implements SampleService {
 		if(message.getTransactionDetails() != null){
 			Event event = Event.builder().eventType("BATCH").batchIntegrity(true).eventState("COMPLETED").txType("V2V").finalState(true)
 					.creationDateTime(System.currentTimeMillis())
-					.origMsgTime(Instant.now())//message.getSentDateTime())
+					.origMsgTime(message.getSentDateTime())
 					.notifTime(Instant.now())
 					.programId("1002251").occurrenceDateTime(System.currentTimeMillis())
 					.id(message.getTransactionDetails().get(0).getTxId()).build();
@@ -124,7 +124,7 @@ public class SampleServiceImpl implements SampleService {
 		if(message.getTransactionDetails() != null){
 			Event event = Event.builder().eventType("BATCH").batchIntegrity(true).eventState("COMPLETED").txType("V2V").finalState(true)
 					.creationDateTime(System.currentTimeMillis())
-					.origMsgTime(Instant.now())//message.getSentDateTime())
+					.origMsgTime(message.getSentDateTime())
 					.notifTime(Instant.now())
 					.programId("1002251").occurrenceDateTime(System.currentTimeMillis())
 					.id(message.getTransactionDetails().get(0).getTxId()).build();

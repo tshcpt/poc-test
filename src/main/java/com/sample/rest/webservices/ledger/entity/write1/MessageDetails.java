@@ -10,9 +10,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "message_details")
-public class MessageDetails implements Serializable {
-
-    private static final long serialVersionUID = 6832006422622219737L;
+public class MessageDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,7 +19,8 @@ public class MessageDetails implements Serializable {
     @Column(name="channel_name")
     private String channelName;
 
-    //private Instant sentDateTime;
+    @Column(name="sent_date_time")
+    private Instant sentDateTime;
 
     //private transient Instant insertTime;
 
