@@ -1,5 +1,6 @@
 package com.sample.rest.webservices.ledger.entity.write1;
 
+import com.sample.rest.webservices.ledger.util.InstantConverter;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -20,6 +21,7 @@ public class MessageDetails {
     private String channelName;
 
     @Column(name="sent_date_time")
+    @Convert(converter = InstantConverter.class)
     private Instant sentDateTime;
 
     //private transient Instant insertTime;

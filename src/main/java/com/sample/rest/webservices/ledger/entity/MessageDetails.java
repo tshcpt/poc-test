@@ -1,5 +1,6 @@
 package com.sample.rest.webservices.ledger.entity;
 
+import com.sample.rest.webservices.ledger.util.InstantConverter;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ public class MessageDetails {
 
     private String channelName;
 
+    @Convert(converter = InstantConverter.class)
     private Instant sentDateTime;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

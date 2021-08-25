@@ -1,5 +1,6 @@
 package com.sample.rest.webservices.ledger.entity.write2;
 
+import com.sample.rest.webservices.ledger.util.InstantConverter;
 import lombok.Data;
 import lombok.ToString;
 
@@ -22,6 +23,7 @@ public class Write2MessageDetails {
     private String channelName;
 
     @Column(name="sent_date_time")
+    @Convert(converter = InstantConverter.class)
     private Instant sentDateTime;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
