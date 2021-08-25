@@ -4,13 +4,9 @@ management:
       enabled: true
 
 spring:
-  flyway:
-    enabled: true
-    validate-on-migrate: true
-    locations: classpath:db/migration
-    baseline-on-migrate: true
+
   profiles:
-    active: dev
+    active: local
 
   devtools:
     livereload:

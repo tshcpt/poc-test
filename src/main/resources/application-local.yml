@@ -3,17 +3,24 @@ management:
     probes:
       enabled: true
 
-spring:
+app:
   datasource:
-    driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://database-1-instance-1.cipwprgh221p.us-east-1.rds.amazonaws.com:3306/pocdb?useSSL=false&serverTimezone=UTC
-    #url: jdbc:mysql://localhost:3306/poc?useSSL=false&serverTimezone=UTC
-    username: admin
-    password: Feud640yarn413
+    write1:
+      jdbcUrl: jdbc:mysql://database-1-instance-1.cipwprgh221p.us-east-1.rds.amazonaws.com:3306/pocdb?useSSL=false&serverTimezone=UTC
+      #url: jdbc:mysql://localhost:3306/poc?useSSL=false&serverTimezone=UTC
+      username: admin
+      password: Feud640yarn413
+    write2:
+      jdbcUrl: jdbc:mysql://poc-db-cluster1.cluster-cipwprgh221p.us-east-1.rds.amazonaws.com:3306/pocdb?useSSL=false&serverTimezone=UTC
+      #url: jdbc:mysql://localhost:3306/poc?useSSL=false&serverTimezone=UTC
+      username: admin
+      password: Feud640yarn413
+spring:
   jpa:
     hibernate.ddl-auto: update
     generate-ddl: true
     show-sql: true
+    database: mysql
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
@@ -56,3 +63,4 @@ spring:
         poc-res-in:
           destination: poc-outbound1
           group: outbound1
+trace: true

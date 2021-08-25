@@ -1,3 +1,17 @@
+app:
+  datasource:
+    write1:
+      jdbcUrl: jdbc:mysql://db2-inst1-1.cipwprgh221p.us-east-1.rds.amazonaws.com:3306/pocdb?useSSL=false&serverTimezone=UTC
+      #url: jdbc:mysql://localhost:3306/poc?useSSL=false&serverTimezone=UTC
+      username: admin
+      password: Feud640yarn413
+    write2:
+      jdbcUrl: jdbc:mysql://db2-inst1-1-us-east-1a.cipwprgh221p.us-east-1.rds.amazonaws.com:3306/pocdb?useSSL=false&serverTimezone=UTC
+      #url: jdbc:mysql://localhost:3306/poc?useSSL=false&serverTimezone=UTC
+      username: admin
+      password: Feud640yarn413
+
+
 spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver

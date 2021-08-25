@@ -1,23 +1,24 @@
 package com.sample.rest.webservices.ledger.service;
 
-import com.sample.rest.webservices.ledger.consumer.LedgerConsumer;
-import com.sample.rest.webservices.ledger.entity.MessageDetails;
-import com.sample.rest.webservices.ledger.entity.QueryResult;
+import com.sample.rest.webservices.ledger.entity.write1.MessageDetails;
+import com.sample.rest.webservices.ledger.entity.write1.QueryResult;
+import com.sample.rest.webservices.ledger.entity.write2.Write2MessageDetails;
 import com.sample.rest.webservices.ledger.producer.ResultProducer;
-import com.sample.rest.webservices.ledger.repository.MessageRepository;
-import com.sample.rest.webservices.ledger.repository.TransactionRepository;
+import com.sample.rest.webservices.ledger.repository.write1.MessageRepository;
+import com.sample.rest.webservices.ledger.repository.write1.TransactionRepository;
+import com.sample.rest.webservices.ledger.repository.write2.Write2MessageRepository;
 import com.sample.rest.webservices.ledger.request.AggregateRequest;
 import com.sample.rest.webservices.ledger.request.CriteriaData;
 import com.sample.rest.webservices.ledger.response.AggregateResponse;
 import com.sample.rest.webservices.ledger.response.ClientNotification;
 import com.sample.rest.webservices.ledger.response.Event;
 import com.sample.rest.webservices.ledger.response.Result;
-import org.apache.kafka.clients.producer.RecordMetadata;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import reactor.util.retry.Retry;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
@@ -31,7 +32,7 @@ import java.util.logging.Logger;
  * This Service class
  *
  */
-@Component
+@Service
 public class SampleServiceImpl implements SampleService {
 	final static Logger log = Logger.getLogger(SampleServiceImpl.class.getName());
 
@@ -39,10 +40,13 @@ public class SampleServiceImpl implements SampleService {
 	private ResultProducer resultProducer;
 
 	@Autowired
-	private MessageRepository  messageRepository;
+	private MessageRepository messageRepository;
 
 	@Autowired
-	private TransactionRepository  transactionRepository;
+	private Write2MessageRepository write2MessageRepository;
+
+	@Autowired
+	private TransactionRepository transactionRepository;
 
 	public AggregateResponse getAggregateBalance(AggregateRequest request){
 		QueryResult resultData = new QueryResult();
@@ -75,13 +79,27 @@ public class SampleServiceImpl implements SampleService {
 		return constructAggregateResponse(resultData, request.getCreiteria().ledgerId);
 	}
 
+	@Transactional
 	public Mono<Void> persistMessage(MessageDetails message){
 
 		messageRepository.save(message);
-		return resultProducer.publish(prepareResponse(message)).retryWhen(Retry.backoff(3, Duration.ofSeconds(2))
+		return resultProducer.publish(prepareResponse(message))
+				.retryWhen(Retry.backoff(3, Duration.ofSeconds(2))
 		.doBeforeRetry(retrySignal ->log.warning("Retry publish ..."+retrySignal)))
 				.then();
 	}
+
+	@Transactional
+	public Mono<Void> persistWrite2Message(Write2MessageDetails message){
+
+		write2MessageRepository.save(message);
+		log.info("Write2MessageDetails: "+message);
+		return resultProducer.publish(prepareResponse(message))
+				.retryWhen(Retry.backoff(3, Duration.ofSeconds(2))
+				.doBeforeRetry(retrySignal ->log.warning("Retry publish ..."+retrySignal)))
+				.then();
+	}
+
 
 	private ClientNotification prepareResponse(MessageDetails message) {
 
@@ -90,7 +108,7 @@ public class SampleServiceImpl implements SampleService {
 		if(message.getTransactionDetails() != null){
 			Event event = Event.builder().eventType("BATCH").batchIntegrity(true).eventState("COMPLETED").txType("V2V").finalState(true)
 					.creationDateTime(System.currentTimeMillis())
-					.origMsgTime(message.getSentDateTime())
+					.origMsgTime(Instant.now())//message.getSentDateTime())
 					.notifTime(Instant.now())
 					.programId("1002251").occurrenceDateTime(System.currentTimeMillis())
 					.id(message.getTransactionDetails().get(0).getTxId()).build();
@@ -98,6 +116,23 @@ public class SampleServiceImpl implements SampleService {
 		}
 		return clientNotification;
 	}
+
+	private ClientNotification prepareResponse(Write2MessageDetails message) {
+
+		ClientNotification clientNotification = null;
+
+		if(message.getTransactionDetails() != null){
+			Event event = Event.builder().eventType("BATCH").batchIntegrity(true).eventState("COMPLETED").txType("V2V").finalState(true)
+					.creationDateTime(System.currentTimeMillis())
+					.origMsgTime(Instant.now())//message.getSentDateTime())
+					.notifTime(Instant.now())
+					.programId("1002251").occurrenceDateTime(System.currentTimeMillis())
+					.id(message.getTransactionDetails().get(0).getTxId()).build();
+			clientNotification = ClientNotification.builder().event(event).build();
+		}
+		return clientNotification;
+	}
+
 
 	private AggregateResponse constructAggregateResponse(QueryResult result, String ledgerAcId ){
 

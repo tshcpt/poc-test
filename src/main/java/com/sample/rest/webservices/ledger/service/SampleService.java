@@ -1,9 +1,9 @@
 package com.sample.rest.webservices.ledger.service;
 
-import com.sample.rest.webservices.ledger.entity.MessageDetails;
+import com.sample.rest.webservices.ledger.entity.write1.MessageDetails;
+import com.sample.rest.webservices.ledger.entity.write2.Write2MessageDetails;
 import com.sample.rest.webservices.ledger.request.AggregateRequest;
 import com.sample.rest.webservices.ledger.response.AggregateResponse;
-import org.apache.kafka.clients.producer.RecordMetadata;
 import reactor.core.publisher.Mono;
 
 public interface SampleService {
@@ -27,5 +27,7 @@ public interface SampleService {
 	AggregateResponse getAggregateBalance(AggregateRequest aggregateRequest);
 
 	Mono<Void> persistMessage(MessageDetails messageDetails);
+
+	Mono<Void> persistWrite2Message(Write2MessageDetails messageDetails);
 
 }

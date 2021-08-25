@@ -17,4 +17,5 @@ public class MessageHeader{
     public String id;
     public Instant sentDateTime;
     public String channelName;
+    public Long partitionKeyId;
 }
