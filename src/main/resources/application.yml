@@ -6,9 +6,4 @@ management:
 spring:
 
   profiles:
-    active: local
-
-  devtools:
-    livereload:
-      port: 35731
-debug: true
+    active: dev
